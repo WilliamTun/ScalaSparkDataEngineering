@@ -2,6 +2,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import com.github.mrpowers.spark.daria.sql.DataFrameExt._
 import org.apache.spark.sql.Row
 import dataHandlers.customSchema
+import org.apache.spark.sql.types.{IntegerType, StructField, StructType}
 
 
 
@@ -69,6 +70,32 @@ object transformFunctions {
     val uniquelyOdd_df = spark.createDataFrame(rdd, customSchema)
     uniquelyOdd_df
 
+  }
+
+
+  def solution4(df: DataFrame, spark: SparkSession): DataFrame = {
+    /** spark RDD Approach */
+    val rdd = df.rdd
+
+
+    val rdd2 = rdd.map(s => (s, 1))
+    val counts = rdd2.reduceByKey((a, b) => a + b)
+    counts.cache()
+
+    val filtered = counts.filter(x => x._2 % 2 != 0)
+    val rdd3 = filtered.map(s => s._1).groupBy(x => x.get(0))
+    rdd3.cache()
+
+    val rdd4 = rdd3.filter(x => x._2.toList.length == 1).map(x => x._2.head)
+
+
+    val customSchema = StructType(Array(
+      StructField("KEY", IntegerType, true),
+      StructField("VALUE", IntegerType, true)
+    ))
+    val df_output = spark.createDataFrame(rdd4, customSchema)
+
+    df_output
   }
 
 }

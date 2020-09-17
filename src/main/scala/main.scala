@@ -1,6 +1,6 @@
 import org.apache.spark.sql.SparkSession
 import dataHandlers.{ReadData, WriteData, getAWSCredentials}
-import transformFunctions.{solution1, solution2, solution3}
+import transformFunctions.{solution1, solution2, solution3, solution4}
 
 object main {
   def main(args: Array[String]): Unit = {
@@ -51,14 +51,16 @@ object main {
       // solution 1 = spark context
       // solution 2 = sql context
       // solution 3 = standard scala
-      val solution = 1
+      val solution = 4
 
       val outputDF = if (solution == 1) {
         solution1(rawDF, spark)
       } else if (solution == 2) {
         solution2(rawDF, spark)
-      } else {
+      } else if (solution == 3) {
         solution3(rawDF, spark)
+      } else {
+        solution4(rawDF, spark)
       }
 
       outputDF.show
