@@ -3,8 +3,7 @@ import com.github.mrpowers.spark.daria.sql.DataFrameExt._
 import org.apache.spark.sql.Row
 import dataHandlers.customSchema
 import org.apache.spark.sql.types.{IntegerType, StructField, StructType}
-
-
+import scala.annotation.tailrec
 
 object transformFunctions {
 
@@ -24,7 +23,6 @@ object transformFunctions {
     df4
 
   }
-
 
   def solution2(df: DataFrame, spark: SparkSession): DataFrame = {
     /** SQL Approach */
@@ -77,7 +75,6 @@ object transformFunctions {
     /** spark RDD Approach */
     val rdd = df.rdd
 
-
     val rdd2 = rdd.map(s => (s, 1))
     val counts = rdd2.reduceByKey((a, b) => a + b)
     counts.cache()
@@ -88,7 +85,6 @@ object transformFunctions {
 
     val rdd4 = rdd3.filter(x => x._2.toList.length == 1).map(x => x._2.head)
 
-
     val customSchema = StructType(Array(
       StructField("KEY", IntegerType, true),
       StructField("VALUE", IntegerType, true)
@@ -96,6 +92,73 @@ object transformFunctions {
     val df_output = spark.createDataFrame(rdd4, customSchema)
 
     df_output
+  }
+
+  def solution5(df: DataFrame, spark: SparkSession): DataFrame = {
+    /** Tail Recursion Approach */
+
+    val arrayData = df.collect()
+
+    @tailrec
+    def count_filter(ar: Array[Row], countMap: Map[Row, Int]): Iterable[Row] = {
+      if (ar.isEmpty) {
+        countMap.filter(x => x._2 % 2 != 0).keys
+      } else {
+        val currentKeyVal = ar.head
+        if (countMap.contains(currentKeyVal)) {
+          val newCount = countMap(currentKeyVal) + 1
+          val newMap = countMap ++ Map(currentKeyVal -> newCount)
+          count_filter(ar.tail, newMap)
+        } else {
+          val newMap = countMap ++ Map(currentKeyVal -> 1)
+          count_filter(ar.tail, newMap)
+        }
+      }
+    }
+
+    val counts_filtered = count_filter(arrayData, Map())
+
+
+    // STEP 2.
+
+    // Note 2.1
+    // Might be better for memory to just accumulate these values...
+    //val countsOne = counts_filtered.map(x => (x, 1))
+    //countsOne.foreach(x => println(x))
+    //countsOne
+
+    // Note 2.2
+    // Simple solution
+    //val groupedByKey = counts_filtered.groupBy(x => x.get(0))
+    //val uniqueKeyVal = groupedByKey.filter(x => x._2.toList.length == 1).values
+    //uniqueKeyVal.foreach(x => println(x))
+
+    @tailrec
+    def removeDuplicateKey(ar: Iterable[Row], keyRowMap: Map[Int, Iterable[Row]]): Iterable[Row] = {
+      if (ar.isEmpty) {
+        keyRowMap.filter(x => x._2.toList.length == 1).map(x=>x._2.head)
+      } else {
+        val currentRow = ar.head
+        val currentKey = currentRow(0).asInstanceOf[Int]
+        if (keyRowMap.contains(currentKey)) {
+          val row = keyRowMap(currentKey)
+          //val row2 = ar.head
+          val newIterableRow = row ++ Iterator(currentRow)
+          val newMap = keyRowMap ++ Map(currentKey -> newIterableRow)
+          removeDuplicateKey(ar.tail, newMap)
+        } else {
+          val newMap = keyRowMap ++ Map(currentKey -> Iterable(currentRow))
+          removeDuplicateKey(ar.tail, newMap)
+        }
+      }
+    }
+
+    val uniquelyOddRows = removeDuplicateKey(counts_filtered,  Map())
+
+    // convert Map back into Spark Dataframe
+    val rdd = spark.sparkContext.parallelize(uniquelyOddRows.toSeq)
+    val uniquelyOdd_df = spark.createDataFrame(rdd, customSchema)
+    uniquelyOdd_df
   }
 
 }

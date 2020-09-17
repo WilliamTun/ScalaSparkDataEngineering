@@ -1,6 +1,6 @@
 import org.apache.spark.sql.SparkSession
 import dataHandlers.{ReadData, WriteData, getAWSCredentials}
-import transformFunctions.{solution1, solution2, solution3, solution4}
+import transformFunctions.{solution1, solution2, solution3, solution4, solution5}
 
 object main {
   def main(args: Array[String]): Unit = {
@@ -51,7 +51,9 @@ object main {
       // solution 1 = spark context
       // solution 2 = sql context
       // solution 3 = standard scala
-      val solution = 4
+      // solution 4 = rdd approach
+      // solution 5 = recursive approach
+      val solution = 5
 
       val outputDF = if (solution == 1) {
         solution1(rawDF, spark)
@@ -59,8 +61,10 @@ object main {
         solution2(rawDF, spark)
       } else if (solution == 3) {
         solution3(rawDF, spark)
-      } else {
+      } else if (solution == 4) {
         solution4(rawDF, spark)
+      } else {
+          solution5(rawDF, spark)
       }
 
       outputDF.show
@@ -76,6 +80,5 @@ object main {
 
 // More things that can be done:
 // -1. set write so that overwrite can occur.
-// -2. explore recursive approach to transforms
-// -3. add try catch error handling - eg. when csv / tsv does not tail the file name.
-// -4. could add unit tests eg. tests to handle wrong parameter input
+// -2. add try catch error handling - eg. when csv / tsv does not tail the file name.
+// -3. could add unit tests eg. tests to handle wrong parameter input
