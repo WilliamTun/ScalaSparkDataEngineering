@@ -1,6 +1,11 @@
 import org.apache.spark.sql.SparkSession
-import dataHandlers.{ReadData, WriteData, getAWSCredentials}
-import transformFunctions.{solution1, solution2, solution3, solution4, solution5}
+import data.dataHandlers.{ReadData, WriteData, getAWSCredentials}
+
+import logic.solution1_spark
+import logic.solution2_sparkSQL.solution2
+import logic.solution3_standard.solution3
+import logic.solution4_rdd.solution4
+import logic.solution5_recursion.solution5
 
 object main {
   def main(args: Array[String]): Unit = {
@@ -47,18 +52,14 @@ object main {
       val rawDF = ReadData(spark, inputPath, format)
 
 
-      // hard coded parameter to select solution method.
-      // solution 1 = spark context
-      // solution 2 = sql context
-      // solution 3 = standard scala
-      // solution 4 = rdd approach
-      // solution 5 = recursive approach
+
       val solution = 5
 
       val outputDF = if (solution == 1) {
-        solution1(rawDF, spark)
+        val x = new solution1_spark
+          x.solution1(rawDF, spark)
       } else if (solution == 2) {
-        solution2(rawDF, spark)
+        solution2(rawDF)
       } else if (solution == 3) {
         solution3(rawDF, spark)
       } else if (solution == 4) {

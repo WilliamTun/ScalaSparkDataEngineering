@@ -1,5 +1,8 @@
-import org.apache.spark.sql.{DataFrame, SparkSession}
+package data
+
 import org.apache.spark.sql.types.{IntegerType, StructField, StructType}
+import org.apache.spark.sql.{DataFrame, SparkSession}
+
 import scala.io.Source
 
 object dataHandlers {
@@ -47,7 +50,7 @@ object dataHandlers {
       ("delimiter", "\t"),
       ("header", "true"))
 
-    df.coalesce(1) // Writes to a single file
+    df.coalesce(1)
       .write
       .options(tsvWithHeaderOptions)
       .csv(path)  // eg. "s3n://bucket/folder/parquet/myFile"
