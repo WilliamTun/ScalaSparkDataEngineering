@@ -25,6 +25,7 @@ object dataHandlers {
     } else {
       val df = spark.sqlContext.read
         .format("csv")
+        .option("header", "true")
         .option("delimiter", "\t")
         .schema(customSchema)
         .load(path)

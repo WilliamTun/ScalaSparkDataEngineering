@@ -7,8 +7,8 @@ import logic.solution3_standard.solution3
 import logic.solution4_rdd.solution4
 import logic.solution5_recursion.solution5
 
-object main {
-  def main(args: Array[String]): Unit = {
+object main extends App {
+    override def main(args: Array[String]): Unit = {
 
     //if (args.length != 3) {
     //  println("Please run: sbt run <input> <output> <credentials>")
@@ -53,11 +53,12 @@ object main {
 
 
 
-      val solution = 5
+      val solution = 1
 
       val outputDF = if (solution == 1) {
         val x = new solution1_spark
-          x.solution1(rawDF, spark)
+        x.solution1(rawDF, spark)
+
       } else if (solution == 2) {
         solution2(rawDF)
       } else if (solution == 3) {

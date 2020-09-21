@@ -27,6 +27,10 @@ val sparkVersion = "2.4.2"
 
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % sparkVersion,
-  "org.apache.spark" %% "spark-sql" % sparkVersion
+  "org.apache.spark" %% "spark-sql" % sparkVersion,
+  "org.mockito" % "mockito-core" % "2.8.47" % "test"
 )
+
+
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % Test
 

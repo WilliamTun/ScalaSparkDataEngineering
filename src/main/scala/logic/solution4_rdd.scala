@@ -4,7 +4,6 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import data.dataHandlers.customSchema
 
-
 object solution4_rdd {
 
   private def CountFilterOddValues(df: DataFrame): RDD[(Row, Int)] = {

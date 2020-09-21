@@ -22,21 +22,6 @@ object solution5_recursion {
     }
   }
 
-
-  // STEP 2.
-
-  // Note 2.1
-  // Might be better for memory to just accumulate these values...
-  //val countsOne = counts_filtered.map(x => (x, 1))
-  //countsOne.foreach(x => println(x))
-  //countsOne
-
-  // Note 2.2
-  // Simple solution
-  //val groupedByKey = counts_filtered.groupBy(x => x.get(0))
-  //val uniqueKeyVal = groupedByKey.filter(x => x._2.toList.length == 1).values
-  //uniqueKeyVal.foreach(x => println(x))
-
   @tailrec
   private def FilterUniquelyOdd(ar: Iterable[Row], keyRowMap: Map[Int, Iterable[Row]]): Iterable[Row] = {
     if (ar.isEmpty) {
@@ -58,6 +43,15 @@ object solution5_recursion {
   }
 
 
+  /* Note.
+  Simpler non-recursive solution to FilterUniquelyOdd:
+
+  val groupedByKey = counts_filtered.groupBy(x => x.get(0))
+  val uniqueKeyVal = groupedByKey.filter(x => x._2.toList.length == 1).values
+  uniqueKeyVal.foreach(x => println(x))
+   */
+
+
   def solution5(df: DataFrame, spark: SparkSession): DataFrame = {
     val arrayData = df.collect()
     val counts_filtered = CountFilterOddValues(arrayData, Map())
@@ -69,5 +63,7 @@ object solution5_recursion {
   }
 
 }
+
+
 
 
