@@ -1,6 +1,5 @@
 package unit
 
-
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Row}
 import org.scalatest.{FunSpec, PrivateMethodTester}
