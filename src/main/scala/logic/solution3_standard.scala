@@ -1,11 +1,11 @@
 package logic
-import org.apache.spark.sql.{DataFrame, Row, SparkSession}
-import data.dataHandlers.customSchema
+
+import org.apache.spark.sql.Row
 
 object solution3_standard {
 
-  private def CountFilterOddValues(df: DataFrame): Map[Int, Map[Int, Int]] = {
-    val arrayData = df.collect().foldLeft(Map.empty[Int, Array[Int]]) {
+  private def CountFilterOddValues(df: Seq[Row]): Map[Int, Map[Int, Int]] = {
+    val arrayData = df.foldLeft(Map.empty[Int, Array[Int]]) {
       case (map, elem) =>
         val currentKey = elem.getInt(0)
         val currentVal = elem.getInt(1)
@@ -29,13 +29,10 @@ object solution3_standard {
   }
 
 
-  def solution3(df:DataFrame, spark: SparkSession): DataFrame = {
+  def solution3(df:Seq[Row]): Seq[Row] = {
     val odd = CountFilterOddValues(df)
     val uniqOdd = FilterUniquelyOdd(odd)
-
-    val rdd = spark.sparkContext.parallelize(uniqOdd)
-    val uniquelyOdd_df = spark.createDataFrame(rdd, customSchema)
-    uniquelyOdd_df
+    uniqOdd
   }
 
 }

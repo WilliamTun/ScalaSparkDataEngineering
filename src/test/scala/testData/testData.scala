@@ -41,7 +41,7 @@ object testData {
   )
 
 
-  val rawRdd = spark.sparkContext.parallelize(List((Row(1, 2), 1), (Row(2, 5), 1), (Row(2, 6), 1)))
+  val oddRDD = spark.sparkContext.parallelize(List((Row(1, 2), 1), (Row(2, 5), 1), (Row(2, 6), 1)))
 
   val rawIterable = Array(
     Row(1, 3),
@@ -52,6 +52,30 @@ object testData {
   )
 
   val oddIterable = Seq(
+    Row(1, 2),
+    Row(2, 5),
+    Row(2, 6)
+  )
+
+  val rawSeqRow = Seq(
+    Row(1, 3),
+    Row(1, 3),
+    Row(1, 2),
+    Row(2, 5),
+    Row(2, 6)
+  )
+
+  val rawRDD = spark.sparkContext.parallelize(List(
+    Row(1, 3),
+    Row(1, 3),
+    Row(1, 2),
+    Row(2, 5),
+    Row(2, 6)
+  ))
+
+  val rawArray = Array(
+    Row(1, 3),
+    Row(1, 3),
     Row(1, 2),
     Row(2, 5),
     Row(2, 6)

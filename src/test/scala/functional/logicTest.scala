@@ -1,39 +1,35 @@
 package functional
 
-import org.apache.spark.sql.Row
 import org.scalatest.FlatSpec
-import testData.testData.{rawDF, spark}
+import org.apache.spark.sql.Row
+import testData.testData.{rawSeqRow, rawRDD, rawArray, rawDF, spark}
+import logic.{solution1_spark, solution2_sparkSQL, solution3_standard, solution4_rdd, solution5_recursion}
 
 class logicTest extends FlatSpec {
     "solution1" should "return rows where values have odd counts and are unique per key" in {
-      import logic.solution1_spark
       val sol1 = new solution1_spark
       val uniqueOdds = sol1.solution1(rawDF, spark)
       assert(uniqueOdds.collect() === Array(Row(1, 2)))
     }
 
   "solution2" should "return rows where values have odd counts and are unique per key" in {
-    import logic.solution2_sparkSQL
     val uniqueOdds = solution2_sparkSQL.solution2(rawDF)
     assert(uniqueOdds.collect() === Array(Row(1, 2)))
   }
 
   "solution3" should "return rows where values have odd counts and are unique per key" in {
-    import logic.solution3_standard
-
-    val uniqueOdds = solution3_standard.solution3(rawDF, spark)
-    assert(uniqueOdds.collect() === Array(Row(1, 2)))
+    val uniqueOdds = solution3_standard.solution3(rawSeqRow)
+    assert(uniqueOdds === Seq(Row(1, 2)))
   }
 
   "solution4" should "return rows where values have odd counts and are unique per key" in {
-    import logic.solution4_rdd
-    val uniqueOdds = solution4_rdd.solution4(rawDF, spark)
+    val uniqueOdds = solution4_rdd.solution4(rawRDD)
     assert(uniqueOdds.collect() === Array(Row(1, 2)))
   }
 
   "solution5" should "return rows where values have odd counts and are unique per key" in {
-    import logic.solution5_recursion
-    val uniqueOdds = solution5_recursion.solution5(rawDF, spark)
-    assert(uniqueOdds.collect() === Array(Row(1, 2)))
+    val uniqueOdds = solution5_recursion.solution5(rawArray)
+    assert(uniqueOdds === Array(Row(1, 2)))
   }
+
 }

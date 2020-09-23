@@ -1,20 +1,10 @@
-import org.apache.spark.sql.SparkSession
-import data.dataHandlers.{ReadData, WriteData, getAWSCredentials}
-
-import logic.solution1_spark
-import logic.solution2_sparkSQL.solution2
-import logic.solution3_standard.solution3
-import logic.solution4_rdd.solution4
-import logic.solution5_recursion.solution5
+import org.apache.spark.sql.{Row, SparkSession}
+import data.dataHandlers.{WriteData, getAWSCredentials, getListOfFiles}
+import data.dataHandlers.{ReadAllFiles, customSchema}
+import logic.solution.solve
 
 object main extends App {
     override def main(args: Array[String]): Unit = {
-
-    //if (args.length != 3) {
-    //  println("Please run: sbt run <input> <output> <credentials>")
-    //  println("For example: sbt run output2.tsv output4.tsv credentials")
-
-    //} else {
 
       /**
       // Note. please change base path from local to AWS path when working with amazon.
@@ -38,49 +28,35 @@ object main extends App {
       spark.sparkContext.hadoopConfiguration.set("fs.s3n.impl", "org.apache.hadoop.fs.s3native.NativeS3FileSystem")
       */
 
-
       // To Run Locally, unblock this section, Block above lines and change top level condition
       val spark = SparkSession.builder
         .appName("SparkSessionExample")
         .master("local[4]")
         .config("spark.sql.warehouse.dir", "target/spark-warehouse").getOrCreate()
+      val sc = spark.sparkContext
 
-      // Read in Data LOCALLY
-      val inputPath = "/Users/williamtun/Documents/Code/Job_Assessments/convex/src/main/resources/data.csv"
+      val choice = Tuple4(Seq(Row.empty),
+                          Array(Row.empty),
+                          spark.sparkContext.parallelize(Seq(Row.empty)),
+                          spark.emptyDataFrame)
 
-      val format = inputPath.takeRight(3)
-      val rawDF = ReadData(spark, inputPath, format)
+      val filesPath = "/Users/williamtun/Documents/Code/Job_Assessments/convex/src/main/resources/"
+      val listRawData = ReadAllFiles(typeInput = choice._2, spark = spark, path = filesPath)
+      val out = solve(listRawData).getOrElse(throw new Exception("could not apply logic to input data"))
 
+      // out.foreach(z => z.collect().foreach(x => println(x)))  // if rdd or dataframe
+      // out.map( z => z.foreach(x => println(x))) // if Array[Row] or Seq[Row]
 
+      val listFile = getListOfFiles("/Users/williamtun/Documents/Code/Job_Assessments/convex/src/main/resources/")
+      val fileNames = listFile.map(x=> x.split("/").last)
+      val zipNameResult = fileNames.zip(out)
 
-      val solution = 1
-
-      val outputDF = if (solution == 1) {
-        val x = new solution1_spark
-        x.solution1(rawDF, spark)
-
-      } else if (solution == 2) {
-        solution2(rawDF)
-      } else if (solution == 3) {
-        solution3(rawDF, spark)
-      } else if (solution == 4) {
-        solution4(rawDF, spark)
-      } else {
-          solution5(rawDF, spark)
-      }
-
-      outputDF.show
-
-      // Write out Data
-      //WriteData(spark, outputDF, outputPath)
-
+      zipNameResult.foreach(nameRes => {
+          val rd = sc.parallelize(nameRes._2)
+          val outputDF = spark.createDataFrame(rd, customSchema)
+          val outputPath = "/Users/williamtun/Documents/Code/Job_Assessments/convex/src/main/resources/outputFolder/" + nameRes._1
+          WriteData(spark, outputDF, outputPath)
+        }
+      )
     }
-
-  //}
 }
-
-
-// More things that can be done:
-// -1. set write so that overwrite can occur.
-// -2. add try catch error handling - eg. when csv / tsv does not tail the file name.
-// -3. could add unit tests eg. tests to handle wrong parameter input

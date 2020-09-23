@@ -2,7 +2,6 @@ package unit
 
 import data.dataHandlers.ReadData
 import org.apache.spark.sql.{Row, SparkSession}
-//import org.scalatest.FlatSpec
 import org.scalatest.FunSpec
 
 class dataHandlersTest extends FunSpec {

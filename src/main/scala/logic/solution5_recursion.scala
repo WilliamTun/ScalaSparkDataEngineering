@@ -1,6 +1,6 @@
 package logic
-import data.dataHandlers.customSchema
-import org.apache.spark.sql.{DataFrame, Row, SparkSession}
+
+import org.apache.spark.sql.Row
 import scala.annotation.tailrec
 
 object solution5_recursion {
@@ -52,18 +52,10 @@ object solution5_recursion {
    */
 
 
-  def solution5(df: DataFrame, spark: SparkSession): DataFrame = {
-    val arrayData = df.collect()
+  def solution5(arrayData: Array[Row]): Array[Row] = {
     val counts_filtered = CountFilterOddValues(arrayData, Map())
     val uniquelyOddRows = FilterUniquelyOdd(counts_filtered,  Map())
-
-    val rdd = spark.sparkContext.parallelize(uniquelyOddRows.toSeq)
-    val uniquelyOdd_df = spark.createDataFrame(rdd, customSchema)
-    uniquelyOdd_df
+    uniquelyOddRows.toArray
   }
 
 }
-
-
-
-

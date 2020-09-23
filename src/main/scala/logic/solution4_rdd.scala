@@ -1,13 +1,13 @@
 package logic
-import org.apache.spark.sql.{DataFrame, SparkSession}
+
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
-import data.dataHandlers.customSchema
 
 object solution4_rdd {
 
-  private def CountFilterOddValues(df: DataFrame): RDD[(Row, Int)] = {
-    val rdd = df.rdd
+  private def CountFilterOddValues(rd: RDD[Row]): RDD[(Row, Int)] = {
+    val rdd = rd
+
     val rdd2 = rdd.map(s => (s, 1))
     val counts = rdd2.reduceByKey((a, b) => a + b)
     counts.cache()
@@ -24,12 +24,10 @@ object solution4_rdd {
     uniqueOdd
   }
 
-
-  def solution4(df: DataFrame, spark: SparkSession): DataFrame = {
+  def solution4(df: RDD[Row]): RDD[Row] = {
     val odd = CountFilterOddValues(df)
     val uniqOdd = FilterUniquelyOdd(odd)
-    val df_output = spark.createDataFrame(uniqOdd, customSchema)
-    df_output
+    uniqOdd
   }
 
 }
