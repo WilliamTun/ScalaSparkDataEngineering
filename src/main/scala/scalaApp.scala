@@ -49,6 +49,8 @@ object scalaApp {
       val listRawData = ReadAllFiles(typeInput = choice._2, spark = spark, path = resourcePath)
       val out = solve(listRawData).getOrElse(throw new Exception("could not apply logic to input data"))
 
+
+
       val listFile = getListOfFiles(resourcePath)
       val fileNames = listFile.map(x=> x.split("/").last)
       val zipNameResult = fileNames.zip(out)
@@ -62,6 +64,9 @@ object scalaApp {
       )
     }
 }
+
+// "WRITE ALL METHOD" + Try catch to handle EMPTY files read in / inappropriate files read in... 
+
 
 // In order to directly print the results onto the command line, add the following lines of code:
 //out.foreach(z => z.collect().foreach(x => println(x)))  // if rdd or dataframe
