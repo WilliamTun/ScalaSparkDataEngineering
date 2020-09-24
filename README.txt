@@ -14,6 +14,4 @@ Still, had I even more time, I would:
    and add a parameter to toggle between solutions
 2. Add try-catch statements to handle 
    cases where no files are found or inappropriate file types are found
-3. refactor data/dataHandlers to have private/public members 
-   and alter tests appropriately
-4. use MONIX library to hook this up to an AWS bucket. 
+3. use MONIX library to hook this up to an AWS bucket. 

@@ -3,10 +3,10 @@ package logic
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.Row
 import org.apache.spark.rdd.RDD
-import solution2_sparkSQL.solution2
-import solution3_standard.solution3
-import solution4_rdd.solution4
-import solution5_recursion.solution5
+import logic.solutionStyle.solution2_sparkSQL.solution2
+import logic.solutionStyle.solution3_standard.solution3
+import logic.solutionStyle.solution4_rdd.solution4
+import logic.solutionStyle.solution5_recursion.solution5
 
 object solution {
 

@@ -2,8 +2,8 @@ package functional
 
 import org.scalatest.FlatSpec
 import org.apache.spark.sql.Row
-import testData.testData.{rawSeqRow, rawRDD, rawArray, rawDF, spark}
-import logic.{solution1_spark, solution2_sparkSQL, solution3_standard, solution4_rdd, solution5_recursion}
+import testData.testData.{rawArray, rawDF, rawRDD, rawSeqRow, spark}
+import logic.solutionStyle.{solution1_spark, solution2_sparkSQL, solution3_standard, solution4_rdd, solution5_recursion}
 
 class logicTest extends FlatSpec {
     "solution1" should "return rows where values have odd counts and are unique per key" in {

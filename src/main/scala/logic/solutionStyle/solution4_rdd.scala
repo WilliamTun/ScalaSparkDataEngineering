@@ -1,4 +1,4 @@
-package logic
+package logic.solutionStyle
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row

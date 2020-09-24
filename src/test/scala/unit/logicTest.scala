@@ -3,8 +3,8 @@ package unit
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Row}
 import org.scalatest.{FunSpec, PrivateMethodTester}
-import testData.testData.{rawDF, rawRDD, rawSeqRow, rawIterable, spark, oddMap, oddRDD, oddIterable}
-import logic.{solution1_spark, solution2_sparkSQL, solution3_standard, solution4_rdd, solution5_recursion}
+import testData.testData.{oddIterable, oddMap, oddRDD, rawDF, rawIterable, rawRDD, rawSeqRow, spark}
+import logic.solutionStyle.{solution1_spark, solution2_sparkSQL, solution3_standard, solution4_rdd, solution5_recursion}
 
 class logicTest extends FunSpec with PrivateMethodTester {
 

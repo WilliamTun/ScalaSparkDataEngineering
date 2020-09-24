@@ -14,7 +14,7 @@ object dataHandlers {
     StructField("VALUE", IntegerType, true)
   ))
 
-  def ReadData(spark: SparkSession, path:String, format: String): DataFrame = {
+  private def ReadData(spark: SparkSession, path:String, format: String): DataFrame = {
 
     if (format == "csv") {
       val df = spark.read
@@ -36,7 +36,6 @@ object dataHandlers {
     }
 
   }
-
 
   def getAWSCredentials(path: String): Map[String, String] = {
     val creds = Source.fromFile(path).getLines
@@ -61,14 +60,12 @@ object dataHandlers {
     Unit
   }
 
-
   def getListOfFiles(dir: String): List[String] = {
     val file = new File(dir)
     file.listFiles.filter(_.isFile)
       .filter(_.getName.endsWith("sv"))
       .map(_.getPath).toList
   }
-
 
   def ReadAllFiles[A](typeInput: A, spark: SparkSession, path: String): List[A] = {
     val files = getListOfFiles(path)
@@ -101,8 +98,6 @@ object dataHandlers {
         })
         listRawData.asInstanceOf[List[A]]
 
-
-
       case typeIn: DataFrame =>
         val listRawData = files.map (inputPath => {
           val format = inputPath.takeRight (3)
@@ -110,7 +105,6 @@ object dataHandlers {
           data
         })
         listRawData.asInstanceOf[List[A]]
-
 
       case _ =>  throw new Exception("Files requested to be read in as an unsupported Datatype");
 

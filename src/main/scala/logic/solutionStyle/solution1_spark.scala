@@ -1,6 +1,7 @@
-package logic
-import org.apache.spark.sql.{DataFrame, SparkSession}
+package logic.solutionStyle
+
 import com.github.mrpowers.spark.daria.sql.DataFrameExt._
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 class solution1_spark {
 
