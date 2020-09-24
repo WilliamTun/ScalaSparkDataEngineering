@@ -1,10 +1,7 @@
 To run the App, type the following command in the command line:
-$ sbt "runMain scalaApp <path/to/resources>”
-eg. 
-sbt "runMain scalaApp /Users/williamtun/Documents/Code/Job_Assessments/convex/src/main/resources/"
-
-
-
+$ sbt "run <path/to/resources>”
+eg.
+sbt "run /Users/williamtun/Documents/Code/Job_Assessments/convex2/ScalaSparkDataEngineering/src/main/resources/"
 
 The key improvements are: 
 1. In the scala/logic folder are 2 additional solutions to the task. 
