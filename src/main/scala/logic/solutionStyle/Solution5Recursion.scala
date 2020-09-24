@@ -4,10 +4,10 @@ import org.apache.spark.sql.Row
 
 import scala.annotation.tailrec
 
-object solution5_recursion {
+object Solution5Recursion {
 
   @tailrec
-  private def CountFilterOddValues(ar: Array[Row], countMap: Map[Row, Int]): Iterable[Row] = {
+  private def countFilterOddValues(ar: Array[Row], countMap: Map[Row, Int]): Iterable[Row] = {
     if (ar.isEmpty) {
       countMap.filter(x => x._2 % 2 != 0).keys
     } else {
@@ -15,16 +15,16 @@ object solution5_recursion {
       if (countMap.contains(currentKeyVal)) {
         val newCount = countMap(currentKeyVal) + 1
         val newMap = countMap ++ Map(currentKeyVal -> newCount)
-        CountFilterOddValues(ar.tail, newMap)
+        countFilterOddValues(ar.tail, newMap)
       } else {
         val newMap = countMap ++ Map(currentKeyVal -> 1)
-        CountFilterOddValues(ar.tail, newMap)
+        countFilterOddValues(ar.tail, newMap)
       }
     }
   }
 
   @tailrec
-  private def FilterUniquelyOdd(ar: Iterable[Row], keyRowMap: Map[Int, Iterable[Row]]): Iterable[Row] = {
+  private def filterUniquelyOdd(ar: Iterable[Row], keyRowMap: Map[Int, Iterable[Row]]): Iterable[Row] = {
     if (ar.isEmpty) {
       keyRowMap.filter(x => x._2.toList.length == 1).map(x=>x._2.head)
     } else {
@@ -35,10 +35,10 @@ object solution5_recursion {
         //val row2 = ar.head
         val newIterableRow = row ++ Iterator(currentRow)
         val newMap = keyRowMap ++ Map(currentKey -> newIterableRow)
-        FilterUniquelyOdd(ar.tail, newMap)
+        filterUniquelyOdd(ar.tail, newMap)
       } else {
         val newMap = keyRowMap ++ Map(currentKey -> Iterable(currentRow))
-        FilterUniquelyOdd(ar.tail, newMap)
+        filterUniquelyOdd(ar.tail, newMap)
       }
     }
   }
@@ -54,8 +54,8 @@ object solution5_recursion {
 
 
   def solution5(arrayData: Array[Row]): Array[Row] = {
-    val counts_filtered = CountFilterOddValues(arrayData, Map())
-    val uniquelyOddRows = FilterUniquelyOdd(counts_filtered,  Map())
+    val counts_filtered = countFilterOddValues(arrayData, Map())
+    val uniquelyOddRows = filterUniquelyOdd(counts_filtered,  Map())
     uniquelyOddRows.toArray
   }
 

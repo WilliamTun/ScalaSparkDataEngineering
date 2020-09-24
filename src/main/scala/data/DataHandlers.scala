@@ -7,14 +7,14 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.Row
 import org.apache.spark.rdd.RDD
 
-object dataHandlers {
+object DataHandlers {
 
   val customSchema = StructType(Array(
     StructField("KEY", IntegerType, true),
     StructField("VALUE", IntegerType, true)
   ))
 
-  private def ReadData(spark: SparkSession, path:String, format: String): DataFrame = {
+  private def readData(spark: SparkSession, path:String, format: String): DataFrame = {
 
     if (format == "csv") {
       val df = spark.read
@@ -46,7 +46,7 @@ object dataHandlers {
     credMap
   }
 
-  def WriteData(spark: SparkSession, df: DataFrame, path: String): Unit = {
+  def writeData(spark: SparkSession, df: DataFrame, path: String): Unit = {
 
     val tsvWithHeaderOptions: Map[String, String] = Map(
       ("delimiter", "\t"),
@@ -67,14 +67,14 @@ object dataHandlers {
       .map(_.getPath).toList
   }
 
-  def ReadAllFiles[A](typeInput: A, spark: SparkSession, path: String): List[A] = {
+  def readAllFiles[A](typeInput: A, spark: SparkSession, path: String): List[A] = {
     val files = getListOfFiles(path)
 
     typeInput match {
       case typeIn: Seq[Row] =>
         val listRawData = files.map (inputPath => {
         val format = inputPath.takeRight (3)
-          val data = ReadData (spark, inputPath, format)
+          val data = readData (spark, inputPath, format)
         val d = data.collect().toSeq
         d
       })
@@ -83,7 +83,7 @@ object dataHandlers {
       case typeIn: Array[Row] =>
         val listRawData = files.map (inputPath => {
           val format = inputPath.takeRight (3)
-          val data = ReadData (spark, inputPath, format)
+          val data = readData (spark, inputPath, format)
           val d = data.collect() // array[Row]
           d
         })
@@ -92,7 +92,7 @@ object dataHandlers {
       case typeIn: RDD[Row] =>
         val listRawData = files.map (inputPath => {
           val format = inputPath.takeRight (3)
-          val data = ReadData (spark, inputPath, format)
+          val data = readData (spark, inputPath, format)
           val d = data.rdd
           d
         })
@@ -101,7 +101,7 @@ object dataHandlers {
       case typeIn: DataFrame =>
         val listRawData = files.map (inputPath => {
           val format = inputPath.takeRight (3)
-          val data = ReadData (spark, inputPath, format)
+          val data = readData (spark, inputPath, format)
           data
         })
         listRawData.asInstanceOf[List[A]]

@@ -2,9 +2,9 @@ package logic.solutionStyle
 
 import org.apache.spark.sql.Row
 
-object solution3_standard {
+object Solution3Standard {
 
-  private def CountFilterOddValues(df: Seq[Row]): Map[Int, Map[Int, Int]] = {
+  private def countFilterOddValues(df: Seq[Row]): Map[Int, Map[Int, Int]] = {
     val arrayData = df.foldLeft(Map.empty[Int, Array[Int]]) {
       case (map, elem) =>
         val currentKey = elem.getInt(0)
@@ -22,7 +22,7 @@ object solution3_standard {
     countsOdd
   }
 
-  private def FilterUniquelyOdd(countsOdd: Map[Int, Map[Int, Int]]): Seq[Row] = {
+  private def filterUniquelyOdd(countsOdd: Map[Int, Map[Int, Int]]): Seq[Row] = {
     val uniqueOdd = countsOdd.filter(x => x._2.size == 1)
     val uniqueOddRow = uniqueOdd.map( {case (key, value) => Row(key, value.keys.head)}).toSeq
     uniqueOddRow
@@ -30,8 +30,8 @@ object solution3_standard {
 
 
   def solution3(df:Seq[Row]): Seq[Row] = {
-    val odd = CountFilterOddValues(df)
-    val uniqOdd = FilterUniquelyOdd(odd)
+    val odd = countFilterOddValues(df)
+    val uniqOdd = filterUniquelyOdd(odd)
     uniqOdd
   }
 

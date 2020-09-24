@@ -3,9 +3,9 @@ package logic.solutionStyle
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 
-object solution4_rdd {
+object Solution4Rdd {
 
-  private def CountFilterOddValues(rd: RDD[Row]): RDD[(Row, Int)] = {
+  private def countFilterOddValues(rd: RDD[Row]): RDD[(Row, Int)] = {
     val rdd = rd
 
     val rdd2 = rdd.map(s => (s, 1))
@@ -16,7 +16,7 @@ object solution4_rdd {
     countsOdd
   }
 
-  private def FilterUniquelyOdd(countsOdd:  RDD[(Row, Int)]): RDD[Row] = {
+  private def filterUniquelyOdd(countsOdd:  RDD[(Row, Int)]): RDD[Row] = {
     val countsOddGrouped = countsOdd.map(s => s._1).groupBy(x => x.get(0))
     countsOddGrouped.cache()
 
@@ -25,8 +25,8 @@ object solution4_rdd {
   }
 
   def solution4(df: RDD[Row]): RDD[Row] = {
-    val odd = CountFilterOddValues(df)
-    val uniqOdd = FilterUniquelyOdd(odd)
+    val odd = countFilterOddValues(df)
+    val uniqOdd = filterUniquelyOdd(odd)
     uniqOdd
   }
 

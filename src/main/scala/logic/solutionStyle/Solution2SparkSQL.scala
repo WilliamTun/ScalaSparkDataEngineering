@@ -2,9 +2,9 @@ package logic.solutionStyle
 
 import org.apache.spark.sql.DataFrame
 
-object solution2_sparkSQL extends solution1_spark {
+object Solution2SparkSQL extends Solution1Spark {
 
-   private def CountFilterOddValues(df: DataFrame): DataFrame = {
+   private def countFilterOddValues(df: DataFrame): DataFrame = {
      df.createOrReplaceTempView("tab")
      val counts = df.sqlContext
       .sql("SELECT KEY, VALUE, COUNT(*) as distinctCounts FROM tab GROUP BY KEY, VALUE")
@@ -17,8 +17,8 @@ object solution2_sparkSQL extends solution1_spark {
    }
 
   def solution2(df: DataFrame): DataFrame = {
-    val odd = CountFilterOddValues(df)
-    val uniOdd = FilterUniquelyOdd(odd)
+    val odd = countFilterOddValues(df)
+    val uniOdd = filterUniquelyOdd(odd)
     uniOdd
   }
 

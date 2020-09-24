@@ -2,10 +2,10 @@ package functional
 
 import org.scalatest.WordSpec
 import org.apache.spark.sql.Row
-import logic.solution.solve
-import testData.testData.{rawDF, rawRDD, rawSeqRow, rawIterable}
+import logic.Solution.solve
+import testData.TestData.{rawDF, rawRDD, rawSeqRow, rawIterable}
 
-class solutionTest extends WordSpec {
+class SolutionTest extends WordSpec {
   "solve()" when {
     "when given a DataFrame " should {
       "implicitly detect DataFrame and apply solution logic" in {

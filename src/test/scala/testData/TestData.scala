@@ -1,10 +1,10 @@
 package testData
 
-import data.dataHandlers.customSchema
+import data.DataHandlers.customSchema
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{Row, SparkSession}
 
-object testData {
+object TestData {
   val spark = SparkSession.builder
     .appName("SparkSessionExample")
     .master("local[4]")
