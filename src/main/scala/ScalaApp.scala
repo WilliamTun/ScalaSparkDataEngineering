@@ -67,22 +67,17 @@ object ScalaApp {
 
 // "WRITE ALL METHOD" + Try catch to handle EMPTY files read in / inappropriate files read in... 
 
-
 // In order to directly print the results onto the command line, add the following lines of code:
 //out.foreach(z => z.collect().foreach(x => println(x)))  // if rdd or dataframe
 //out.map( z => z.foreach(x => println(x))) // if Array[Row] or Seq[Row]
-
 
 // Low hanging fruit:
 // 1. Check naming conventions - done --> recheck later!
 // 1.2   change readme.txt to readme.md
 
-
 // 2. Read spark files in parallel
 // https://stackoverflow.com/questions/50507187/how-to-process-files-parallely-in-spark-using-spark-read-function
 // 15 and 16.
-
-
 
 // 3. check Solution4RDD:
 //    to -> RDD[(Int, Int)]

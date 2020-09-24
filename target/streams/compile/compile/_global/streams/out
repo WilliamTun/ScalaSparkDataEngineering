@@ -1,2 +1,10 @@
-[0m[[0m[33mwarn[0m] [0m[0mthere was one deprecation warning (since 2.11.0); re-run with -deprecation for details[0m
-[0m[[0m[33mwarn[0m] [0m[0mone warning found[0m
+[0m[[0m[33mwarn[0m] [0m[0m/Users/williamtun/Documents/Code/Job_Assessments/convex2/ScalaSparkDataEngineering/src/main/scala/data/DataHandlers.scala:74:20: non-variable type argument org.apache.spark.sql.Row in type pattern Seq[org.apache.spark.sql.Row] (the underlying of Seq[org.apache.spark.sql.Row]) is unchecked since it is eliminated by erasure[0m
+[0m[[0m[33mwarn[0m] [0m[0m      case typeIn: Seq[Row] =>[0m
+[0m[[0m[33mwarn[0m] [0m[0m                   ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/Users/williamtun/Documents/Code/Job_Assessments/convex2/ScalaSparkDataEngineering/src/main/scala/data/DataHandlers.scala:92:20: non-variable type argument org.apache.spark.sql.Row in type pattern org.apache.spark.rdd.RDD[org.apache.spark.sql.Row] is unchecked since it is eliminated by erasure[0m
+[0m[[0m[33mwarn[0m] [0m[0m      case typeIn: RDD[Row] =>[0m
+[0m[[0m[33mwarn[0m] [0m[0m                   ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/Users/williamtun/Documents/Code/Job_Assessments/convex2/ScalaSparkDataEngineering/src/main/scala/data/DataHandlers.scala:101:20: non-variable type argument org.apache.spark.sql.Row in type pattern org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] (the underlying of org.apache.spark.sql.DataFrame) is unchecked since it is eliminated by erasure[0m
+[0m[[0m[33mwarn[0m] [0m[0m      case typeIn: DataFrame =>[0m
+[0m[[0m[33mwarn[0m] [0m[0m                   ^[0m
+[0m[[0m[33mwarn[0m] [0m[0mthree warnings found[0m
