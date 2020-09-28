@@ -4,7 +4,7 @@ import org.apache.spark.sql.DataFrame
 
 object Solution2SparkSQL extends Solution1Spark {
 
-   private def countFilterOddValues(df: DataFrame): DataFrame = {
+   def countFilterOddValues(df: DataFrame): DataFrame = {
      df.createOrReplaceTempView("tab")
      val counts = df.sqlContext
       .sql("SELECT KEY, VALUE, COUNT(*) as distinctCounts FROM tab GROUP BY KEY, VALUE")

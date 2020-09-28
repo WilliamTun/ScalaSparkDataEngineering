@@ -2,39 +2,38 @@ package data
 
 import java.io.File
 import scala.io.Source
-import org.apache.spark.sql.types.{IntegerType, StructField, StructType}
-import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.apache.spark.sql.Row
-import org.apache.spark.rdd.RDD
 
 object DataHandlers {
 
-  val customSchema = StructType(Array(
-    StructField("KEY", IntegerType, true),
-    StructField("VALUE", IntegerType, true)
-  ))
+  def getListOfFiles(dir: String): List[String] = {
+    val file = new File(dir)
+    file.listFiles.filter(_.isFile)
+      .filter(_.getName.endsWith("sv"))
+      .map(_.getPath).toList
+  }
 
-  private def readData(spark: SparkSession, path:String, format: String): DataFrame = {
+  private def open(path: String) = new File(path)
 
-    if (format == "csv") {
-      val df = spark.read
-        .format("csv")
-        .option("header", "true")
-        .schema(customSchema)
-        .load(path)
-        .na.fill(0)
-      df
-    } else {
-      val df = spark.sqlContext.read
-        .format("csv")
-        .option("header", "true")
-        .option("delimiter", "\t")
-        .schema(customSchema)
-        .load(path)
-        .na.fill(0)
-      df
-    }
+  private implicit class RichFile(file: File) {
+    def read() = Source.fromFile(file).getLines
+  }
 
+  def readFile(filePath: String): Seq[KeyVal] = {
+    val raw = open(filePath).read.drop(1)
+    raw.filter(x => x != "").map(x => x.split("[,\t]")).map(xx =>
+      if (xx.length == 2) {
+        KeyVal(xx(0).toInt, xx(1).toInt)
+      } else if (xx.length == 1) {
+        KeyVal(xx(0).toInt, 0)
+      } else {
+        null
+      }
+    ).toSeq
+  }
+
+  def readAllFiles(resourcePath: String): List[Seq[KeyVal]] = {
+    val listFile = getListOfFiles(resourcePath)
+    listFile.map(x => readFile(x))
   }
 
   def getAWSCredentials(path: String): Map[String, String] = {
@@ -46,68 +45,4 @@ object DataHandlers {
     credMap
   }
 
-  def writeData(spark: SparkSession, df: DataFrame, path: String): Unit = {
-
-    val tsvWithHeaderOptions: Map[String, String] = Map(
-      ("delimiter", "\t"),
-      ("header", "true"))
-
-    df.coalesce(1)
-      .write
-      .options(tsvWithHeaderOptions)
-      .csv(path)  // eg. "s3n://bucket/folder/parquet/myFile"
-
-    Unit
-  }
-
-  def getListOfFiles(dir: String): List[String] = {
-    val file = new File(dir)
-    file.listFiles.filter(_.isFile)
-      .filter(_.getName.endsWith("sv"))
-      .map(_.getPath).toList
-  }
-
-  def readAllFiles[A](typeInput: A, spark: SparkSession, path: String): List[A] = {
-    val files = getListOfFiles(path)
-
-    typeInput match {
-      case typeIn: Seq[Row] =>
-        val listRawData = files.map (inputPath => {
-        val format = inputPath.takeRight (3)
-          val data = readData (spark, inputPath, format)
-        val d = data.collect().toSeq
-        d
-      })
-        listRawData.asInstanceOf[List[A]]
-
-      case typeIn: Array[Row] =>
-        val listRawData = files.map (inputPath => {
-          val format = inputPath.takeRight (3)
-          val data = readData (spark, inputPath, format)
-          val d = data.collect() // array[Row]
-          d
-        })
-        listRawData.asInstanceOf[List[A]]
-
-      case typeIn: RDD[Row] =>
-        val listRawData = files.map (inputPath => {
-          val format = inputPath.takeRight (3)
-          val data = readData (spark, inputPath, format)
-          val d = data.rdd
-          d
-        })
-        listRawData.asInstanceOf[List[A]]
-
-      case typeIn: DataFrame =>
-        val listRawData = files.map (inputPath => {
-          val format = inputPath.takeRight (3)
-          val data = readData (spark, inputPath, format)
-          data
-        })
-        listRawData.asInstanceOf[List[A]]
-
-      case _ =>  throw new Exception("Files requested to be read in as an unsupported Datatype");
-
-    }
-  }
 }

@@ -5,16 +5,16 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 
 class Solution1Spark {
 
-  private def countFilterOddValues(df: DataFrame, spark: SparkSession): DataFrame = {
+  def countFilterOddValues(df: DataFrame, spark: SparkSession): DataFrame = {
     import spark.implicits._
 
-    val counts= df.groupBy("KEY", "VALUE").count().as("counts")
+    val counts= df.groupBy("key", "value").count().as("counts")
     val countsOdd = counts.filter($"count" % 2 =!=0).drop("count")
     countsOdd
   }
 
-  protected def filterUniquelyOdd(df: DataFrame): DataFrame = {
-    val uniqueOdd = df.killDuplicates("KEY")
+  def filterUniquelyOdd(df: DataFrame): DataFrame = {
+    val uniqueOdd = df.killDuplicates("key")
     uniqueOdd
   }
 

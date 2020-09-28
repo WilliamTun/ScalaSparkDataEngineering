@@ -1,13 +1,12 @@
 package logic.solutionStyle
 
-import org.apache.spark.sql.Row
-
+import data.KeyVal
 import scala.annotation.tailrec
 
 object Solution5Recursion {
 
   @tailrec
-  private def countFilterOddValues(ar: Array[Row], countMap: Map[Row, Int]): Iterable[Row] = {
+  def countFilterOddValues(ar: Array[KeyVal], countMap: Map[KeyVal, Int]): Iterable[KeyVal] = {
     if (ar.isEmpty) {
       countMap.filter(x => x._2 % 2 != 0).keys
     } else {
@@ -24,12 +23,12 @@ object Solution5Recursion {
   }
 
   @tailrec
-  private def filterUniquelyOdd(ar: Iterable[Row], keyRowMap: Map[Int, Iterable[Row]]): Iterable[Row] = {
+  def filterUniquelyOdd(ar: Iterable[KeyVal], keyRowMap: Map[Int, Iterable[KeyVal]]): Iterable[KeyVal] = {
     if (ar.isEmpty) {
       keyRowMap.filter(x => x._2.toList.length == 1).map(x=>x._2.head)
     } else {
       val currentRow = ar.head
-      val currentKey = currentRow(0).asInstanceOf[Int]
+      val currentKey = currentRow.key
       if (keyRowMap.contains(currentKey)) {
         val row = keyRowMap(currentKey)
         //val row2 = ar.head
@@ -53,7 +52,7 @@ object Solution5Recursion {
    */
 
 
-  def solution5(arrayData: Array[Row]): Array[Row] = {
+  def solution5(arrayData: Array[KeyVal]): Array[KeyVal] = {
     val counts_filtered = countFilterOddValues(arrayData, Map())
     val uniquelyOddRows = filterUniquelyOdd(counts_filtered,  Map())
     uniquelyOddRows.toArray

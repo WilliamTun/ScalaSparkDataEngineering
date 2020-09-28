@@ -1,11 +1,11 @@
 package logic.solutionStyle
 
+import data.KeyVal
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.Row
 
 object Solution4Rdd {
 
-  private def countFilterOddValues(rd: RDD[Row]): RDD[(Row, Int)] = {
+  def countFilterOddValues(rd: RDD[KeyVal]): RDD[(KeyVal, Int)] = {
     val rdd = rd
 
     val rdd2 = rdd.map(s => (s, 1))
@@ -16,16 +16,16 @@ object Solution4Rdd {
     countsOdd
   }
 
-  private def filterUniquelyOdd(countsOdd:  RDD[(Row, Int)]): RDD[Row] = {
-    val countsOddGrouped = countsOdd.map(s => s._1).groupBy(x => x.get(0))
+  def filterUniquelyOdd(countsOdd:  RDD[(KeyVal, Int)]): RDD[KeyVal] = {
+    val countsOddGrouped = countsOdd.map(s => s._1).groupBy(x => x.key)
     countsOddGrouped.cache()
 
     val uniqueOdd = countsOddGrouped.filter(x => x._2.toList.length == 1).map(x => x._2.head)
     uniqueOdd
   }
 
-  def solution4(df: RDD[Row]): RDD[Row] = {
-    val odd = countFilterOddValues(df)
+  def solution4(data: RDD[KeyVal]): RDD[KeyVal] = {
+    val odd = countFilterOddValues(data)
     val uniqOdd = filterUniquelyOdd(odd)
     uniqOdd
   }

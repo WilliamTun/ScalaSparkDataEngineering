@@ -1,10 +1,9 @@
 package unit
 
-import data.DataHandlers
-import org.apache.spark.sql.{DataFrame, Row, SparkSession}
+import data.DataHandlers.readFile
+import data.KeyVal
+import org.apache.spark.sql.SparkSession
 import org.scalatest.{FunSpec, PrivateMethodTester}
-import testData.TestData.{rawDF, spark}
-
 
 class DataHandlersTest extends FunSpec with PrivateMethodTester {
 
@@ -18,49 +17,28 @@ class DataHandlersTest extends FunSpec with PrivateMethodTester {
     describe("read CSV files into spark dataframe") {
       it("should handle integer values correctly") {
         val inputPath = "/Users/williamtun/Documents/Code/Job_Assessments/convex/src/main/resources/tests/csv/dataTest.csv"
-        val format = inputPath.takeRight(3)
-        val decorateToDataFrame = PrivateMethod[DataFrame]('ReadData)
-        val rawDF = DataHandlers invokePrivate decorateToDataFrame(spark, inputPath, format)
-        assert(rawDF.collect() === Array(Row(1, 3), Row(1, 3), Row(1, 2), Row(2, 5)))
+        val raw = readFile(inputPath)
+        assert(raw === Stream(KeyVal(1, 3), KeyVal(1, 3), KeyVal(1, 2), KeyVal(2, 5)))
       }
       it("should impute zero into empty values") {
         val inputPath = "/Users/williamtun/Documents/Code/Job_Assessments/convex/src/main/resources/tests/csv/zeroTest.csv"
-        val format = inputPath.takeRight(3)
-        val decorateToDataFrame = PrivateMethod[DataFrame]('ReadData)
-        val rawDF = DataHandlers invokePrivate decorateToDataFrame(spark, inputPath, format)
-        assert(rawDF.collect() === Array(Row(1, 0)))
-      }
-      it("should impose KEY and VALUE as headers") {
-        val inputPath = "/Users/williamtun/Documents/Code/Job_Assessments/convex/src/main/resources/tests/csv/headerTest.csv"
-        val format = inputPath.takeRight(3)
-        val decorateToDataFrame = PrivateMethod[DataFrame]('ReadData)
-        val rawDF = DataHandlers invokePrivate decorateToDataFrame(spark, inputPath, format)
-        assert(rawDF.columns === Array("KEY", "VALUE"))
+        val raw = readFile(inputPath)
+        assert(raw === Stream(KeyVal(1, 0)))
       }
     }
 
     describe("read TSV files into spark dataframe") {
       it ("should handle integer values correctly") {
         val inputPath = "/Users/williamtun/Documents/Code/Job_Assessments/convex/src/main/resources/tests/tsv/dataTest.tsv"
-        val format = inputPath.takeRight(3)
-        val decorateToDataFrame = PrivateMethod[DataFrame]('ReadData)
-        val rawDF = DataHandlers invokePrivate decorateToDataFrame(spark, inputPath, format)
-        assert(rawDF.collect() === Array(Row(1, 3), Row(1, 3), Row(1, 2), Row(2, 5)))
+        val raw = readFile(inputPath)
+        assert(raw === Stream(KeyVal(1, 3), KeyVal(1, 3), KeyVal(1, 2), KeyVal(2, 5)))
       }
       it("should impute zero into empty values") {
         val inputPath = "/Users/williamtun/Documents/Code/Job_Assessments/convex/src/main/resources/tests/tsv/zeroTest.tsv"
-        val format = inputPath.takeRight(3)
-        val decorateToDataFrame = PrivateMethod[DataFrame]('ReadData)
-        val rawDF = DataHandlers invokePrivate decorateToDataFrame(spark, inputPath, format)
-        assert(rawDF.collect() === Array(Row(1, 0)))
+        val raw = readFile(inputPath)
+        assert(raw === Stream(KeyVal(1, 0)))
       }
-      it("should impose KEY and VALUE as headers") {
-        val inputPath = "/Users/williamtun/Documents/Code/Job_Assessments/convex/src/main/resources/tests/tsv/headerTest.tsv"
-        val format = inputPath.takeRight(3)
-        val decorateToDataFrame = PrivateMethod[DataFrame]('ReadData)
-        val rawDF = DataHandlers invokePrivate decorateToDataFrame(spark, inputPath, format)
-        assert(rawDF.columns === Array("KEY", "VALUE"))
-      }
+
     }
   }
 }

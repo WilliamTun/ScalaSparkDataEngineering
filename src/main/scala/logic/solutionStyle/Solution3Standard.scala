@@ -1,14 +1,14 @@
 package logic.solutionStyle
 
-import org.apache.spark.sql.Row
+import data.KeyVal
 
 object Solution3Standard {
 
-  private def countFilterOddValues(df: Seq[Row]): Map[Int, Map[Int, Int]] = {
+  def countFilterOddValues(df: Seq[KeyVal]): Map[Int, Map[Int, Int]] = {
     val arrayData = df.foldLeft(Map.empty[Int, Array[Int]]) {
       case (map, elem) =>
-        val currentKey = elem.getInt(0)
-        val currentVal = elem.getInt(1)
+        val currentKey = elem.key
+        val currentVal = elem.value
         if (map.keys.exists(_ == currentKey)) {
           val newVal: Array[Int] = map(currentKey) ++ Array(currentVal)
           map.updated(currentKey, newVal)
@@ -22,15 +22,15 @@ object Solution3Standard {
     countsOdd
   }
 
-  private def filterUniquelyOdd(countsOdd: Map[Int, Map[Int, Int]]): Seq[Row] = {
+  def filterUniquelyOdd(countsOdd: Map[Int, Map[Int, Int]]): Seq[KeyVal] = {
     val uniqueOdd = countsOdd.filter(x => x._2.size == 1)
-    val uniqueOddRow = uniqueOdd.map( {case (key, value) => Row(key, value.keys.head)}).toSeq
+    val uniqueOddRow = uniqueOdd.map( {case (key, value) => KeyVal(key, value.keys.head)}).toSeq
     uniqueOddRow
   }
 
 
-  def solution3(df:Seq[Row]): Seq[Row] = {
-    val odd = countFilterOddValues(df)
+  def solution3(data:Seq[KeyVal]): Seq[KeyVal] = {
+    val odd = countFilterOddValues(data)
     val uniqOdd = filterUniquelyOdd(odd)
     uniqOdd
   }
