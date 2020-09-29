@@ -1,9 +1,12 @@
 
 # Instructions #
 To run the App, type the following command in the command line:
-$ sbt "run <solution number [1-5]> <path/to/resources>”
-eg.
-sbt "run 1 /Users/williamtun/Documents/Code/Job_Assessments/convex2/ScalaSparkDataEngineering/src/main/resources/"
+
+`$ sbt "run <solution number [1-5]> <path/to/resources>”`
+
+For example:
+
+`$ sbt "run 1 /Users/williamtun/Documents/Code/Job_Assessments/convex2/ScalaSparkDataEngineering/src/main/resources/"`
 
 # Refactor: #
 1. Objects and case classes are CamelCase & methods are lowerCamelCase
