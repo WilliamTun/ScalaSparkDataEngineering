@@ -1,5 +1,5 @@
 import org.apache.spark.sql.SparkSession
-import data.DataHandlers.{readAllFiles}
+import data.DataReader.readAllFiles
 import logic.Solution.{solve, write}
 
 object ScalaApp {
@@ -27,21 +27,20 @@ object ScalaApp {
       spark.sparkContext.hadoopConfiguration.set("fs.s3n.impl", "org.apache.hadoop.fs.s3native.NativeS3FileSystem")
       */
 
-      //// Run Locally:
-      //if (args.length == 0) {
-      //  throw new Exception("Parameter for path to resources folder required")
-      //}
-      //val resourcePath = args(0)
+      // Run Locally:
+      if (args.length == 0) {
+        throw new Exception("Parameter for path to resources folder required")
+      }
+
+      val choice = args(0).toInt
+      val resourcePath = args(1)
 
       val spark = SparkSession.builder
-        .appName("SparkSessionExample")
+        .appName("Scala App")
         .master("local[4]")
         .config("spark.sql.warehouse.dir", "target/spark-warehouse").getOrCreate()
 
-      val resourcePath = "/Users/williamtun/Documents/Code/Job_Assessments/convex2/ScalaSparkDataEngineering/src/main/resources/"
       val allFiles = readAllFiles(resourcePath)
-
-      val choice = 1
 
       if (choice == 1) {
         import spark.implicits._
@@ -75,7 +74,3 @@ object ScalaApp {
 
     }
 }
-
-// "WRITE ALL METHOD" + Try catch to handle EMPTY files read in / inappropriate files read in...
-// 1.1   remove ds store:
-//       https://stackoverflow.com/questions/107701/how-can-i-remove-ds-store-files-from-a-git-repository

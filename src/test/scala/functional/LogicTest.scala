@@ -8,11 +8,11 @@ import data.KeyVal
 
 class LogicTest extends FlatSpec {
 
-    "solution1" should "return rows where values have odd counts and are unique per key" in {
-      val sol = new Solution1Spark
-      val uniqueOdds = sol.solution1(rawDF, spark)
-      assert(uniqueOdds.collect() === Array(Row(1, 2)))
-    }
+  "solution1" should "return rows where values have odd counts and are unique per key" in {
+    val sol = new Solution1Spark
+    val uniqueOdds = sol.solution1(rawDF, spark)
+    assert(uniqueOdds.collect() === Array(Row(1, 2)))
+  }
 
   "solution2" should "return rows where values have odd counts and are unique per key" in {
     val uniqueOdds = Solution2SparkSQL.solution2(rawDF)

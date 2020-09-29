@@ -1,14 +1,14 @@
 package unit
 
-import data.DataHandlers.readFile
+import data.DataReader.readFile
 import data.KeyVal
 import org.apache.spark.sql.SparkSession
 import org.scalatest.{FunSpec, PrivateMethodTester}
 
-class DataHandlersTest extends FunSpec with PrivateMethodTester {
+class DataReaderTest extends FunSpec with PrivateMethodTester {
 
   val spark = SparkSession.builder
-    .appName("SparkSessionExample")
+    .appName("Test DataHandlers")
     .master("local[4]")
     .config("spark.sql.warehouse.dir", "target/spark-warehouse").getOrCreate()
 

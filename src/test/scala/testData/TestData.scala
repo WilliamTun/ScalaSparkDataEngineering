@@ -5,7 +5,7 @@ import data.KeyVal
 
 object TestData {
   val spark = SparkSession.builder
-    .appName("SparkSessionExample")
+    .appName("SparkSessionTest")
     .master("local[4]")
     .config("spark.sql.warehouse.dir", "target/spark-warehouse").getOrCreate()
 

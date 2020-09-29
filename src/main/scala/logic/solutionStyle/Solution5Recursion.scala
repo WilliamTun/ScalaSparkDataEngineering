@@ -31,7 +31,6 @@ object Solution5Recursion {
       val currentKey = currentRow.key
       if (keyRowMap.contains(currentKey)) {
         val row = keyRowMap(currentKey)
-        //val row2 = ar.head
         val newIterableRow = row ++ Iterator(currentRow)
         val newMap = keyRowMap ++ Map(currentKey -> newIterableRow)
         filterUniquelyOdd(ar.tail, newMap)
@@ -41,16 +40,6 @@ object Solution5Recursion {
       }
     }
   }
-
-
-  /* Note.
-  Simpler non-recursive solution to FilterUniquelyOdd:
-
-  val groupedByKey = counts_filtered.groupBy(x => x.get(0))
-  val uniqueKeyVal = groupedByKey.filter(x => x._2.toList.length == 1).values
-  uniqueKeyVal.foreach(x => println(x))
-   */
-
 
   def solution5(arrayData: Array[KeyVal]): Array[KeyVal] = {
     val counts_filtered = countFilterOddValues(arrayData, Map())

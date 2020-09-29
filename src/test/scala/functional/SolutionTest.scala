@@ -9,7 +9,6 @@ import testData.TestData.{rawDF, rawRDD, rawSeqRow, rawIterable}
 
 class SolutionTest extends WordSpec {
   "solve()" when {
-
     "when given a DataFrame " should {
       "implicitly detect DataFrame and apply solution logic" in {
         val wrappedResult = solve(List(rawDF))
@@ -17,7 +16,6 @@ class SolutionTest extends WordSpec {
         assert(result.collect() === Array(Row(1, 2)))
       }
     }
-
 
     "when given RDD[Row] " should {
       "implicitly detect RDD[Row] and apply solve" in {

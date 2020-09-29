@@ -1,22 +1,17 @@
+
+** Instructions **
 To run the App, type the following command in the command line:
-$ sbt "run <path/to/resources>”
+$ sbt "run <solution number [1-5]> <path/to/resources>”
 eg.
-sbt "run /Users/williamtun/Documents/Code/Job_Assessments/convex2/ScalaSparkDataEngineering/src/main/resources/"
+sbt "run 1 /Users/williamtun/Documents/Code/Job_Assessments/convex2/ScalaSparkDataEngineering/src/main/resources/"
 
-The key improvements are: 
-1. In the scala/logic folder are 2 additional solutions to the task. 
-"solution4" uses RDD and "solution5" applies tail recursion 
-2. An encapsulating "solution" abstract class has been added to implicitly detect the data type of the input into a solve function. The solve function that applies the appropriate solution depending on the input data type. 
-3. I've added a variety of unit and functional tests. I decided to use several different styles of test just to showcase i am aware of the variety of styles that exist. 
-4. ReadAllFiles() method has been added which loops through ALL the files in a given folder. 
-  Thus the business logic can now be applied across the list of files (csv or tsv) and written out respectively. 
+** Refactor: **
+1. Objects and case classes are CamelCase & methods are lowerCamelCase
+2. Multiple Files read in as a STREAM (main/scala/data/DataHandlers)
+3. Each row is split by "," or "\t" and values put into a case class: KeyVal(key: Int, value: Int)
+4. solution choice determined by if else statements, conditioned on parameter
+5. solve() method in main/scala/Solution uses context bound syntax
+   and abstract class solution[A] has an additional writeData method
 
-The recruiter advised I upload my work by wednesday evening 
-in case another candidate gets the spot. 
- 
-Still, had I even more time, I would: 
-1. Get this code working on the commandline 
-   and add a parameter to toggle between solutions
-2. Add try-catch statements to handle 
-   cases where no files are found or inappropriate file types are found
-3. use MONIX library to hook this up to an AWS bucket. 
+** Improvements **
+1. use MONIX library to hook this up to an AWS bucket.
