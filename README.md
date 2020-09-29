@@ -6,7 +6,7 @@ To run the App, type the following command in the command line:
 
 For example:
 
-`$ sbt "run 1 /Users/williamtun/Documents/Code/Job_Assessments/convex2/ScalaSparkDataEngineering/src/main/resources/"`
+`$ sbt "run 1 /Users/williamtun/Documents/ScalaSparkDataEngineering/src/main/resources/"`
 
 # Refactor: #
 1. Objects and case classes are CamelCase & methods are lowerCamelCase
